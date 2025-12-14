@@ -1,0 +1,111 @@
+@import '@point-hub/papp/index.css';
+
+@layer base {
+  .scrollbar-hidden {
+    /* Firefox */
+    scrollbar-width: none;
+
+    /* Webkit-based browsers (Chrome, Safari, Edge) */
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Internet Explorer/Edge */
+    -ms-overflow-style: none;
+  }
+  .scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.bg-body { @apply bg-slate-50; }
+
+/* Floating animation blobs - shared globally */
+@keyframes floatOne {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(5deg);
+  }
+}
+
+@keyframes floatTwo {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(10px) rotate(-5deg);
+  }
+}
+
+.animate-float-one {
+  animation: floatOne 6s ease-in-out infinite;
+}
+
+.animate-float-two {
+  animation: floatTwo 7s ease-in-out infinite reverse;
+}
+
+
+.slide-down-enter-active,
+.slide-down-leave-active {
+  transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.slide-down-enter-from {
+  opacity: 0;
+  transform: translateY(-12px); /* start slightly above */
+}
+
+.slide-down-leave-to {
+  opacity: 0;
+  transform: translateY(-12px); /* exit upwards */
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.25s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(30%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.25s ease-out;
+}
+
+
+/* Fade effect for the overlay */
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.slide-up-enter-from,
+.slide-up-leave-to {
+  opacity: 0;
+}
+
+/* Slide effect for the inner panel */
+.slide-up-enter-active .menu-panel,
+.slide-up-leave-active .menu-panel {
+  transition: transform 0.3s ease-out;
+}
+
+.slide-up-enter-from .menu-panel,
+.slide-up-leave-to .menu-panel {
+  transform: translateY(100%);
+}
