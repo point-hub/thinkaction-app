@@ -21,7 +21,7 @@ const totalSupporting = ref(0);
     <div class="min-h-svh bg-body">
       <!-- Profile Header -->
       <div class="w-full px-4 py-8">
-        <div class="flex items-center items-start gap-6">
+        <div class="flex flex-col lg:flex-row items-center items-start gap-6">
           <div class="flex flex-col items-center py-2 px-4">
             <avatar-uploader />
             <div class="flex gap-2">
@@ -35,7 +35,7 @@ const totalSupporting = ref(0);
           <div class="flex-1">
             <div class="mt-2">
               <!-- Username -->
-              <div class="text-lg font-semibold">
+              <div class="text-lg font-semibold text-center lg:text-left">
                 {{ myUser?.username }}
               </div>
               <!-- User status -->
@@ -50,7 +50,7 @@ const totalSupporting = ref(0);
                 No bio yet — share a bit about yourself and inspire others! ✨
               </p>
 
-              <div class="flex gap-6 mt-4 text-sm text-slate-700">
+              <div class="flex gap-6 mt-4 text-sm text-slate-700 justify-center lg:justify-start">
                 <div><strong>{{ formatShortNumber(totalGoals) }}</strong> Goals</div>
                 <div><strong>{{ formatShortNumber(totalSupporters) }}</strong> Supporters</div>
                 <div><strong>{{ formatShortNumber(totalSupporting) }}</strong> Supporting</div>

@@ -100,7 +100,7 @@ const onUnsupport = async () => {
     <div v-if="isUserExists" class="min-h-svh bg-body">
       <!-- Profile Header -->
       <div class="w-full px-4 py-8">
-        <div class="flex items-center items-start gap-6">
+        <div class="flex flex-col lg:flex-row items-center items-start gap-6">
           <div class="flex flex-col items-center py-2 px-4">
             <avatar :user="user" :size="128" />
             <div v-if="myUser && myUser?.username !== username" class="flex gap-2 mt-2">
@@ -112,7 +112,7 @@ const onUnsupport = async () => {
               </base-button>
             </div>
           </div>
-          <div class="flex-1">
+          <div class="flex-1 text-center lg:text-left">
             <div class="mt-2">
               <!-- Username -->
               <div class="text-lg font-semibold">
@@ -130,7 +130,7 @@ const onUnsupport = async () => {
                 No bio yet — share a bit about yourself and inspire others! ✨
               </p>
 
-              <div class="flex gap-6 mt-4 text-sm text-slate-700">
+              <div class="flex gap-6 mt-4 text-sm text-slate-700 justify-center lg:justify-start">
                 <div><strong>{{ formatShortNumber(totalGoals) }}</strong> Goals</div>
                 <div><strong>{{ formatShortNumber(totalSupporters) }}</strong> Supporters</div>
                 <div><strong>{{ formatShortNumber(totalSupporting) }}</strong> Supporting</div>
