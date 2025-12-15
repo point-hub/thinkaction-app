@@ -112,8 +112,8 @@ const onUnsupport = async () => {
               </base-button>
             </div>
           </div>
-          <div class="flex-1 text-center lg:text-left">
-            <div class="mt-2">
+          <div class="flex-1">
+            <div class="text-center lg:text-left">
               <!-- Username -->
               <div class="text-lg font-semibold">
                 {{ user?.username }}
