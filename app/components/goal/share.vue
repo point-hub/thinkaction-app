@@ -24,7 +24,7 @@ const currentUrl = props.goalLink;
     class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[60]"
     @click.self="closePopup"
   >
-    <div class="bg-white rounded-lg shadow-xl max-w-xl m-4 p-10 relative">
+    <div class="bg-white rounded-lg shadow-xl max-w-xl p-4 relative">
       <h3 class="text-xl text-center font-bold mb-10">
         Share
       </h3>
@@ -35,7 +35,7 @@ const currentUrl = props.goalLink;
         &times;
       </button>
 
-      <div class="grid grid-cols-5 gap-6">
+      <div class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-4 lg:gap-6">
         <button
           class="flex flex-col items-center flex-shrink-0 w-16"
           @click="copyLink"

@@ -29,7 +29,7 @@ defineExpose({
 </script>
 
 <template>
-  <div class="relative grid grid-cols-2 gap-4">
+  <div class="relative grid lg:grid-cols-2 gap-2 lg:gap-4">
     <div v-for="support in supports?.data" :key="support._id">
       <router-link :to="`/@${support?.supporting?.username}`">
         <div class="flex shadow bg-white items-center p-4 gap-3 cursor-pointer">
