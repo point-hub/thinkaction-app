@@ -155,7 +155,7 @@ const onSignout = async () => {
           <nuxt-link v-if="isAuthenticated" to="/profile" class="w-full flex px-4 items-center gap-2 py-3 border-b border-blue-100 hover:bg-blue-50" @click="showMenu = false">
             <div class="w-7 h-7 rounded-full bg-pink-400" /> Profile
           </nuxt-link>
-          <nuxt-link v-if="!isAuthenticated" to="/profile" class="w-full flex px-4 items-center gap-2 py-3 border-b border-blue-100 hover:bg-blue-50" @click="showMenu = false">
+          <nuxt-link v-if="!isAuthenticated" to="/signin" class="w-full flex px-4 items-center gap-2 py-3 border-b border-blue-100 hover:bg-blue-50" @click="showMenu = false">
             <div class="w-7 h-7 rounded-full bg-pink-400" /> Sign In
           </nuxt-link>
           <button v-if="isAuthenticated" class="w-full flex px-4 items-center gap-2 py-3 border-b border-blue-100 hover:bg-red-50" @click="onSignout">
