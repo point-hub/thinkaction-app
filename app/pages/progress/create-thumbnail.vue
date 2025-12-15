@@ -165,6 +165,7 @@ const applyCrop = async () => {
 
     const img = new Image();
     img.crossOrigin = 'anonymous';
+
     img.onload = () => {
       const fabricImg = new fabric.FabricImage(img, {
         originX: 'left',
@@ -187,11 +188,10 @@ const applyCrop = async () => {
 
       canvasContainer.value!.style.width = `${canvas!.width}px`;
       canvasContainer.value!.style.height = `${canvas!.height}px`;
+      isCropped.value = true;
     };
     img.src = croppedImage.value;
   };
-
-  isCropped.value = true;
 };
 
 const addText = () => {
@@ -631,6 +631,7 @@ const onNext = async () => {
             </template>
           </div>
         </div>
+
         <div class="flex items-center justify-between w-full">
           <div>
             <base-button size="lg" shape="rounded" variant="filled" color="danger" @click="onBack">

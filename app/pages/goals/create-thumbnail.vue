@@ -186,11 +186,10 @@ const applyCrop = async () => {
 
       canvasContainer.value!.style.width = `${canvas!.width}px`;
       canvasContainer.value!.style.height = `${canvas!.height}px`;
+      isCropped.value = true;
     };
     img.src = croppedImage.value;
   };
-
-  isCropped.value = true;
 };
 
 const addText = () => {
