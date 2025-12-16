@@ -260,10 +260,10 @@ onUnmounted(stopTimer);
       to="/progress/create"
     >
       <div class="flex flex-col items-center cursor-pointer">
-        <div class="w-12 h-12 rounded-xl bg-slate-200 flex items-center justify-center">
+        <div class="w-20 h-20 rounded-full bg-slate-200 flex items-center justify-center">
           <div class="i-fluent:camera-add-20-filled w-10 h-10 text-slate-500" />
         </div>
-        <span class="text-xs mt-1 font-bold">Progress</span>
+        <span class="text-xs text-center mt-1 w-20 truncate font-bold">Progress</span>
       </div>
     </nuxt-link>
 

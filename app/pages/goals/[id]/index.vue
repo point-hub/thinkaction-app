@@ -7,16 +7,6 @@ useHead({
   ],
 });
 
-useSeoMeta({
-  title: 'Thinkaction — Turn Ideas into Action',
-  description: 'Join Thinkaction to share, track, and achieve your personal and community goals.',
-  ogTitle: 'Thinkaction — Turn Ideas into Action',
-  ogType: 'website',
-  ogSiteName: 'Thinkaction',
-  ogDescription: 'Join Thinkaction to share, track, and achieve your personal and community goals.',
-  ogUrl: 'https://thinkaction.id/',
-});
-
 const { user: myUser } = useAuth();
 
 const apiGoals = useApiGoals();
@@ -31,6 +21,19 @@ function onGoalDeleted(id: string) {
   if (!goals.value?.data) return;
   goals.value.data = goals.value.data.filter(g => g._id !== id);
 }
+
+useSeoMeta({
+  title: 'Thinkaction — Turn Ideas into Action',
+  description: 'Join Thinkaction to share, track, and achieve your personal and community goals.',
+  ogTitle: 'Thinkaction — Turn Ideas into Action',
+  ogType: 'website',
+  ogSiteName: 'Thinkaction',
+  ogDescription: 'Join Thinkaction to share, track, and achieve your personal and community goals.',
+  ogUrl: 'https://thinkaction.id/',
+  ogImage: goals.value.data[0]?.thumbnail_url,
+  twitterCard: 'summary_large_image',
+  twitterImage: goals.value.data[0]?.thumbnail_url,
+});
 </script>
 
 <template>
