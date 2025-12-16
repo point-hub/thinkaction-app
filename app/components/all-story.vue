@@ -171,7 +171,10 @@ watch(activeIndex, () => {
  * Lifecycle
  * ------------------------------------------------------------------ */
 onMounted(async () => {
-  const response = await apiGoals.retrieveAllProgress({sort: '-created_at'});
+  const response = await apiGoals.retrieveAllProgress({
+    sort: '-created_at',
+    page_size: 25,
+  });
   progressList.value = response.data;
   progressList.value?.forEach((_, index) => loadImage(index));
 });
