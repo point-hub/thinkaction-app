@@ -52,7 +52,6 @@ export const useApiFetch = async <T>(
   if (error && (error.status || error.statusCode) === 401 && !retried) {
     const refreshed = await refreshToken(config.public.apiBase, headers);
     if (refreshed) return useApiFetch(url, options, true);
-    // if (import.meta.client) navigateTo('/signin')
   }
 
   return result as AsyncData<T, FetchError | null>;
