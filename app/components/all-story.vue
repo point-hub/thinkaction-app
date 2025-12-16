@@ -253,7 +253,7 @@ onUnmounted(stopTimer);
   </div>
 
   <!-- Story Thumbnails -->
-  <div class="flex gap-2 overflow-x-auto py-2 px-4 bg-[#FBFBFB]">
+  <div class="flex gap-2 overflow-x-auto scrollbar-hidden py-2 px-4 bg-[#FBFBFB]">
     <!-- Add Progress -->
     <nuxt-link
       v-if="myUser?._id"
@@ -274,22 +274,22 @@ onUnmounted(stopTimer);
       class="flex flex-col items-center cursor-pointer"
       @click="openStory(index)"
     >
-      <div class="w-12 h-12 rounded-xl border border-pink-500 relative">
+      <div class="w-20 h-20 rounded-full border border-pink-500 relative">
         <img
           :src="story.thumbnail_url"
-          class="rounded-xl object-cover w-full h-full"
+          class="rounded-full object-cover w-full h-full"
         >
         <div
           v-if="getPreloadingStatus(index) === 'loading'"
           class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 rounded-xl"
         >
-          <svg class="animate-spin h-4 w-4 text-white" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+          <svg class="animate-spin h-4 w-4 text-white" viewBox="0 0 40 40">
+            <circle cx="20" cy="20" r="10" stroke="currentColor" stroke-width="4" />
           </svg>
         </div>
       </div>
-      <span class="text-xs mt-1">
-        {{ dateProgress(story.created_at) }}
+      <span class="text-xs text-center mt-1 w-20 truncate">
+        {{ story.created_by?.username }}
       </span>
     </div>
   </div>

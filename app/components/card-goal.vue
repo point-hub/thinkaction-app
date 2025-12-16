@@ -210,7 +210,9 @@ const goalShareLink = computed(() => {
       </div>
 
       <!-- Story Progress -->
-      <card-goal-story v-model:goal="goal" />
+      <template v-if="goal?.progress?.length ?? 0 > 0">
+        <card-goal-story v-model:goal="goal" />
+      </template>
 
       <!-- Goal Thumbnail -->
       <div class="w-full bg-gray-200 object-cover">
