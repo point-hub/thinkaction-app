@@ -141,6 +141,15 @@ const goalShareLink = computed(() => {
   if (!goal.value?._id) return '';
   return `${appBaseURL}/goals/${goal.value._id}`;
 });
+
+const isWithin7Days = (createdAt: string | Date) => {
+  const created = new Date(createdAt);
+  const now = new Date();
+
+  const diffInDays = (now.getTime() - created.getTime()) / (1000 * 60 * 60 * 24);
+
+  return diffInDays <= 7;
+};
 </script>
 
 <template>
@@ -274,11 +283,13 @@ const goalShareLink = computed(() => {
           </div>
           <div>
             <!-- Timeleft -->
-            <div v-if="goal?.status === 'in-progress'" class="flex items-center gap-1">
-              <div class="bg-green-300 py-1 px-4 rounded-full text-xs">
-                <client-only>{{ dateLeft(goal?.time) }}</client-only>
+            <client-only>
+              <div v-if="goal?.status === 'in-progress' && goal.created_at && isWithin7Days(goal.created_at)" class="flex items-center gap-1">
+                <div class="bg-green-300 py-1 px-4 rounded-full text-xs">
+                  {{ dateLeft(goal?.time) }}
+                </div>
               </div>
-            </div>
+            </client-only>
           </div>
         </div>
         <div class="text-sm mt-4">

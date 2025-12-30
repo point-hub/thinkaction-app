@@ -6,9 +6,21 @@ const asideMounted = ref(false);
 const { user: myUser } = useAuth();
 const apiGoals = useApiGoals();
 
+const isWithin7Days = (createdAt: string | Date) => {
+  const created = new Date(createdAt);
+  const now = new Date();
+
+  const diffInDays = (now.getTime() - created.getTime()) / (1000 * 60 * 60 * 24);
+
+  return diffInDays <= 7;
+};
+
 const { data: goals } = await apiGoals.retrieveAllReactive({
   sort: '-created_at',
-  filter: { created_by_id: myUser.value?._id, status: 'in-progress' },
+  filter: {
+    created_by_id: myUser.value?._id,
+    status: 'in-progress',
+  },
 });
 
 onMounted(() => {
@@ -32,10 +44,12 @@ onMounted(() => {
 
         <div v-if="goals.pagination.total_document > 0" class="flex flex-col gap-4">
           Which goal do you want to add progress to?
-          <nuxt-link v-for="goal in goals.data" :key="goal._id" :to="`/progress/create-thumbnail?goal_id=${goal._id}`" class="p-2 flex flex-col border border-slate-300">
-            <span class="font-semibold text-xs text-gray-400">Next week, I want to</span>
-            <span>{{ goal.specific }}</span>
-          </nuxt-link>
+          <template v-for="goal in goals.data" :key="goal._id">
+            <nuxt-link v-if="goal.created_at && isWithin7Days(goal.created_at)" :to="`/progress/create-thumbnail?goal_id=${goal._id}`" class="p-2 flex flex-col border border-slate-300">
+              <span class="font-semibold text-xs text-gray-400">Next week, I want to</span>
+              <span>{{ goal.specific }}</span>
+            </nuxt-link>
+          </template>
         </div>
         <template v-else>
           <div class="flex items-center h-full justify-center">

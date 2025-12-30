@@ -179,6 +179,15 @@ onMounted(() => {
 onUnmounted(() => {
   if (timer) clearInterval(timer);
 });
+
+const isWithin7Days = (createdAt: string | Date) => {
+  const created = new Date(createdAt);
+  const now = new Date();
+
+  const diffInDays = (now.getTime() - created.getTime()) / (1000 * 60 * 60 * 24);
+
+  return diffInDays <= 7;
+};
 </script>
 
 <template>
@@ -267,7 +276,7 @@ onUnmounted(() => {
   <!-- Story Progress -->
   <div class="flex shadow overflow-x-auto scrollbar-hidden gap-2 border-t border-gray-100 py-2 px-4 bg-[#FBFBFB]">
     <!-- Add Progress -->
-    <nuxt-link v-if="goal?.status === 'in-progress'" :to="`/progress/create-thumbnail?goal_id=${goal?._id}`">
+    <nuxt-link v-if="goal?.status === 'in-progress' && goal?.created_at && isWithin7Days(goal?.created_at)" :to="`/progress/create-thumbnail?goal_id=${goal?._id}`">
       <div v-if="myUser && myUser._id === goal?.created_by?._id" class="flex flex-col items-center cursor-pointer">
         <div class="w-12 h-12 rounded-xl bg-slate-200 relative flex items-center justify-center">
           <div class="i-fluent:camera-add-20-filled w-10 h-10 rounded-xl text-slate-500" />
