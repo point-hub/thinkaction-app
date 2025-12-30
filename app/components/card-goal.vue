@@ -56,13 +56,7 @@ function editGoal() {
 
 /* Complete Goal Section */
 const completeGoal = async () => {
-  await useApiGoals().update(goal.value!._id as string, {
-    status: 'achieved',
-  });
-
-  goal.value!.status = 'achieved';
-  isMenuOpen.value = false;
-  toast('Congratulations for achieving your goal.', { color: 'success' });
+  navigateTo('/complete/create-thumbnail?goal_id=' + goal.value?._id);
 };
 
 /* Delete Goal Section */
