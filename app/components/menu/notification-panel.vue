@@ -63,7 +63,7 @@ onMounted(async () => {
         <!-- Body -->
         <div class="flex-1 overflow-y-auto p-3 gap-4">
           <template v-for="(notification, index) in notifications?.data" :key="index">
-            <div v-if="notification" class="flex items-center gap-3 p-2 hover:bg-slate-50 transition" :class="{ 'bg-slate-100': !notification.is_read }">
+            <div v-if="notification" class="flex items-start gap-3 p-2 hover:bg-slate-50 transition" :class="{ 'bg-slate-100': !notification.is_read }">
               <avatar :size="32" :user="notification.actor" />
 
               <template v-if="notification.type === 'comment'">
@@ -89,6 +89,15 @@ onMounted(async () => {
                   <div class="flex-1 text-sm">
                     <span class="font-semibold">{{ notification.actor?.username }}</span>
                     <span class="text-slate-600 pl-1">is unsupporting you</span>
+                    <div class="text-xs text-slate-400">{{ timeAgo(notification.created_at) }}</div>
+                  </div>
+                </nuxt-link>
+              </template>
+              <template v-else-if="notification.type === 'goal-reminder'">
+                <nuxt-link :to="`/goals/${notification.entities?.goals}`" @click="showSidebar = false">
+                  <div class="flex-1 text-sm">
+                    <span class="font-semibold">System</span>
+                    <span class="text-slate-600 pl-1">You have 1 day left to wrap up your goal.</span>
                     <div class="text-xs text-slate-400">{{ timeAgo(notification.created_at) }}</div>
                   </div>
                 </nuxt-link>
