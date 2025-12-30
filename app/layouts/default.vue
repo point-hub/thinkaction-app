@@ -1,7 +1,12 @@
 <script setup>
+import { ref, onMounted  } from 'vue';
 import { toastRef } from '~/composables/toast';
+import { useApiNotifications } from '~/composables/api/notifications';
 
 const { signout, isAuthenticated, user: authUser } = useAuth();
+const apiNotifications = useApiNotifications();
+
+const notifications = ref();
 
 const showMenu = ref(false);
 const showCreateMenu = ref(false);
@@ -9,7 +14,7 @@ const showNotificationPanel = ref(false);
 const showSearchPanel = ref(false);
 const showCreatePanel = ref(false);
 
-const { unreadCount, clearUnread } = useNotification();
+const { unreadCount, clearUnread, incrementUnread } = useNotification();
 
 const toggleNotificationPanel = () => {
   if (!authUser.value) {
@@ -40,6 +45,21 @@ const onSignout = async () => {
   await signout();
   navigateTo('/signin');
 };
+
+onMounted(async () => {
+  notifications.value = await apiNotifications.retrieveAll({
+    filter: {
+      recipient_id: authUser.value?._id,
+      is_read: false,
+    },
+    sort: '-created_at',
+  });
+
+  if (notifications.value.data.length) {
+    console.log('incremented');
+    incrementUnread();
+  }
+});
 </script>
 
 <template>
