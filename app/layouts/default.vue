@@ -98,7 +98,13 @@ const onSignout = async () => {
           <span>Sign Out</span>
         </button>
       </div>
-      <div v-else class="mt-auto pt-6 border-t border-gray-200">
+      <div v-else class="mt-auto pt-6 border-t border-gray-200 gap-2 flex flex-col">
+        <nuxt-link to="/signup">
+          <button class="flex items-center cursor-pointer w-full space-x-2 px-2 py-2.5 bg-primary text-white hover:bg-blue-600 rounded-lg font-bold">
+            <div class="i-icon-park-outline:doc-add text-3xl" />
+            <span>Register</span>
+          </button>
+        </nuxt-link>
         <nuxt-link to="/signin">
           <button class="flex items-center cursor-pointer w-full space-x-2 px-2 py-2.5 bg-blue-500 text-white hover:bg-blue-600 rounded-lg font-bold">
             <div class="i-stash:signin text-3xl" />
