@@ -103,7 +103,7 @@ onBeforeRouteLeave((_to, _from, next) => {
 
     <form class="flex flex-col gap-2" @submit.prevent="onSignin">
 
-      <base-input id="username" v-model="form.username" :disabled="isSubmitting" autofocus :errors="formErrors.username" type="text" placeholder="Username" size="lg" rounded>
+      <base-input id="username" v-model="form.username" :disabled="isSubmitting" autofocus :errors="formErrors.username" type="text" placeholder="Username / Email" size="lg" rounded>
         <template #suffix>
           <span class="i-mdi:user-outline text-xl text-blue bg-blue" />
         </template>
