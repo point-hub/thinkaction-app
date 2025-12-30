@@ -4,6 +4,7 @@ import { useApiUsers } from '~/composables/api/users';
 const { user, updateUser } = useAuth();
 
 const form = ref({
+  username: user.value?.username,
   name: user.value?.name,
   profile: {
     status: user.value?.profile?.status,
@@ -12,6 +13,7 @@ const form = ref({
 });
 
 interface FormErrors {
+  username: string[]
   name: string[]
   profile: {
     status: string[]
@@ -20,6 +22,7 @@ interface FormErrors {
 }
 
 const defaultFormErrors = {
+  username: [],
   name: [],
   profile: {
     status: [],
@@ -84,6 +87,10 @@ watch(
     </template>
 
     <form class="flex flex-col gap-4" @submit.prevent="onSave">
+      <div class="flex flex-col gap-2">
+        <p class="font-bold">Username</p>
+        <base-input v-model="form.name" :disabled="true" autofocus :errors="formErrors.name" type="text" placeholder="Name" size="lg" rounded />
+      </div>
       <div class="flex flex-col gap-2">
         <p class="font-bold">Name</p>
         <base-input v-model="form.name" :disabled="isSubmitting" autofocus :errors="formErrors.name" type="text" placeholder="Name" size="lg" rounded />
