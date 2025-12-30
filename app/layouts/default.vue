@@ -1,7 +1,7 @@
 <script setup>
 import { toastRef } from '~/composables/toast';
 
-const { signout, isAuthenticated } = useAuth();
+const { signout, isAuthenticated, user: authUser } = useAuth();
 
 const showMenu = ref(false);
 const showCreateMenu = ref(false);
@@ -12,6 +12,9 @@ const showCreatePanel = ref(false);
 const { unreadCount, clearUnread } = useNotification();
 
 const toggleNotificationPanel = () => {
+  if (!authUser.value) {
+    navigateTo('/signin');
+  }
   closeAllPanel();
   showNotificationPanel.value = !showNotificationPanel.value;
 };
