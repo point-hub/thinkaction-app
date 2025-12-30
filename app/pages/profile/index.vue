@@ -3,9 +3,9 @@ import { ref } from 'vue';
 import formatShortNumber from '~/utils/format-short-number';
 
 const tabs: { name: string; icon: string }[] = [
-  { name: 'Goals', icon: 'i-mingcute:target-fill' },
-  { name: 'Supporters', icon: 'i-lucide:users' },
-  { name: 'Supporting', icon: 'i-lucide:user-star' },
+  { name: 'Public Goals', icon: 'i-mingcute:target-fill' },
+  { name: 'Supporters Only', icon: 'i-lucide:users' },
+  { name: 'Private', icon: 'i-lucide:user-star' },
 ];
 const activeTab = ref(tabs[0]!.name);
 
@@ -83,18 +83,18 @@ const totalSupporting = ref(0);
       </div>
 
       <!-- Goals Tab -->
-      <div v-show="activeTab === 'Goals'" class="mx-auto gap-1 lg:p-8">
-        <user-goals v-model:total-goals="totalGoals" :user="myUser!" />
+      <div v-show="activeTab === 'Public Goals'" class="mx-auto gap-1 lg:p-8">
+        <user-goals-public v-model:total-goals="totalGoals" :user="myUser!" />
       </div>
 
       <!-- Supporters Tab -->
-      <div v-show="activeTab === 'Supporters'" class="mx-auto gap-1 p-4 lg:p-8">
-        <user-supporters ref="supportersRef" v-model:total-supporters="totalSupporters" :user_id="myUser?._id" />
+      <div v-show="activeTab === 'Supporters Only'" class="mx-auto gap-1 p-4 lg:p-8">
+        <user-goals-supporters-only v-model:total-goals="totalGoals" :user="myUser!" />
       </div>
 
       <!-- Supporting Tab -->
-      <div v-show="activeTab === 'Supporting'" class="mx-auto gap-1 p-4 lg:p-8">
-        <user-supporting v-model:total-supporting="totalSupporting" :user_id="myUser?._id" />
+      <div v-show="activeTab === 'Private'" class="mx-auto gap-1 p-4 lg:p-8">
+        <user-goals-private v-model:total-goals="totalGoals" :user="myUser!" />
       </div>
     </div>
   </layouts-with-aside>
