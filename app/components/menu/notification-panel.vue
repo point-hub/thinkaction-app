@@ -70,7 +70,7 @@ onMounted(async () => {
                 <nuxt-link :to="`/goals/${notification.entities?.goals}`" @click="showSidebar = false">
                   <div class="flex-1 text-sm">
                     <span class="font-semibold">{{ notification.actor?.username }}</span>
-                    <span class="text-slate-600 pl-1">is commmenting on your goal</span>
+                    <span class="text-slate-600 pl-1">is commenting on your goal</span>
                     <div class="text-xs text-slate-400">{{ timeAgo(notification.created_at) }}</div>
                   </div>
                 </nuxt-link>
