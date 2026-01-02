@@ -36,7 +36,7 @@ const loadGoals = async () => {
   try {
     const res = await apiGoals.retrieveAllReactive({
       filter: { created_by_id: user.value?._id, visibility: 'public' },
-      sort: '-created_at',
+      sort: '-updated_at,-created_at',
       page: currentPage.value,
       page_size: pageSize,
     });

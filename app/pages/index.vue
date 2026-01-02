@@ -49,7 +49,7 @@ const loadGoals = async () => {
 
   try {
     const res = await apiGoals.retrieveAllReactive({
-      sort: '-created_at',
+      sort: '-updated_at,-created_at',
       page: currentPage.value,
       page_size: pageSize,
     });
