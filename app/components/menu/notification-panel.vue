@@ -69,11 +69,14 @@ onMounted(async () => {
               <avatar :size="32" :user="notification.actor" />
 
               <template v-if="notification.type === 'comment'">
-                <nuxt-link :to="`/goals/${notification.entities?.goals}`" @click="showSidebar = false">
+                <nuxt-link :to="`/goals/${notification.entities?.goals}`" class="flex justify-between flex-1" @click="showSidebar = false">
                   <div class="flex-1 text-sm">
                     <span class="font-semibold">{{ notification.actor?.username }}</span>
                     <span class="text-slate-600 pl-1">is commenting on your goal</span>
                     <div class="text-xs text-slate-400">{{ timeAgo(notification.created_at) }}</div>
+                  </div>
+                  <div v-if="notification.thumbnail_url" class="flex items-center flex-0">
+                    <img :src="notification.thumbnail_url" class="w-8 h-8 rounded-lg">
                   </div>
                 </nuxt-link>
               </template>
@@ -86,12 +89,15 @@ onMounted(async () => {
                   </div>
                 </nuxt-link>
               </template>
-              <template v-else-if="notification.type === 'unsupport'">
-                <nuxt-link :to="`/@${notification.actor?.username}`" @click="showSidebar = false">
+              <template v-else-if="notification.type === 'cheers'">
+                <nuxt-link :to="`/goals/${notification.entities?.goals}`" class="flex justify-between flex-1" @click="showSidebar = false">
                   <div class="flex-1 text-sm">
                     <span class="font-semibold">{{ notification.actor?.username }}</span>
-                    <span class="text-slate-600 pl-1">is unsupporting you</span>
+                    <span class="text-slate-600 pl-1">is cheers on your goal</span>
                     <div class="text-xs text-slate-400">{{ timeAgo(notification.created_at) }}</div>
+                  </div>
+                  <div v-if="notification.thumbnail_url" class="flex items-center flex-0">
+                    <img :src="notification.thumbnail_url" class="w-8 h-8 rounded-lg">
                   </div>
                 </nuxt-link>
               </template>

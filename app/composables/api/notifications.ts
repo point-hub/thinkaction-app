@@ -7,6 +7,7 @@ export interface INotification {
   goal_id?: string
   comment?: string
   is_read?: string
+  thumbnail_url?: string
   entities?: Record<string, string>
   // Metadata
   created_at?: Date
