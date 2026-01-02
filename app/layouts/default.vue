@@ -56,7 +56,6 @@ onMounted(async () => {
   });
 
   if (notifications.value.data.length) {
-    console.log('incremented');
     incrementUnread();
   }
 });

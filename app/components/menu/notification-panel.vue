@@ -6,6 +6,7 @@ import { useAblyChannel } from '~/composables/pub-sub';
 const userId = useAuth().user.value?._id;
 const { messages, subscribe } = useAblyChannel(`notifications:${userId}`);
 const apiNotifications = useApiNotifications();
+const { clearUnread } = useNotification();
 
 const showSidebar = defineModel('show-sidebar', {
   type: Boolean,
@@ -28,6 +29,7 @@ watch(
   () => {
     if (showSidebar.value) {
       apiNotifications.updateRead();
+      clearUnread();
     }
   },
 );
