@@ -89,7 +89,7 @@ watch(
     <form class="flex flex-col gap-4" @submit.prevent="onSave">
       <div class="flex flex-col gap-2">
         <p class="font-bold">Username</p>
-        <base-input v-model="form.name" :disabled="true" autofocus :errors="formErrors.name" type="text" placeholder="Name" size="lg" rounded />
+        <base-input v-model="form.username" :disabled="true" autofocus :errors="formErrors.username" type="text" placeholder="Name" size="lg" rounded />
       </div>
       <div class="flex flex-col gap-2">
         <p class="font-bold">Name</p>
