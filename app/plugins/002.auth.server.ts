@@ -24,10 +24,7 @@ export default defineNuxtPlugin(async () => {
         baseURL,
         method: 'GET',
         credentials: 'include',
-        headers: {
-          ...headers,
-          ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
-        },
+        headers: useRequestHeaders(['cookie']),
       });
 
       updateUser(data);
