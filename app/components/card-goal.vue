@@ -261,7 +261,9 @@ const isWithin7Days = (createdAt: string | Date) => {
           <div class="flex gap-3">
             <!-- Cheers -->
             <div class="flex items-center gap-1">
-              <div v-if="goal?.my_cheered_id" class="i-lucide:biceps-flexed text-3xl text-green-900 cursor-pointer transition-colors" @click="onCheer" />
+              <div v-if="goal?.my_cheered_id" class="text-green-900 cursor-pointer transition-colors" @click="onCheer">
+                <img src="/icons/cheers-filled.svg" alt="">
+              </div>
               <div v-else class="i-lucide:biceps-flexed text-3xl cursor-pointer transition-colors" @click="onCheer" />
               <p class="font-lg">{{ formatShortNumber(goal?.total_cheers ?? 0) }}</p>
             </div>
