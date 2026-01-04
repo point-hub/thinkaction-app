@@ -65,7 +65,7 @@ onMounted(async () => {
         <!-- Body -->
         <div class="flex-1 overflow-y-auto p-3 gap-4">
           <template v-for="(notification, index) in notifications?.data" :key="index">
-            <div v-if="notification" class="flex items-start gap-3 p-2 hover:bg-slate-50 transition" :class="{ 'bg-slate-100': !notification.is_read }">
+            <div v-if="notification && ['comment', 'support', 'cheers', 'goal-reminder'].includes(notification.type)" class="flex items-start gap-3 p-2 hover:bg-slate-50 transition" :class="{ 'bg-slate-100': !notification.is_read }">
               <avatar :size="32" :user="notification.actor" />
 
               <template v-if="notification.type === 'comment'">
