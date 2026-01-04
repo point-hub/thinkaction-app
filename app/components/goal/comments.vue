@@ -2,6 +2,7 @@
 import type { IGoal } from '~/composables/api/goals';
 import { ref } from 'vue';
 import { useApiComments, type IComment } from '~/composables/api/comments';
+import { useApiUsers } from '~/composables/api/users';
 
 const goal = defineModel<IGoal>('goal');
 const isOpen = defineModel<boolean>('isOpen', { default: false });
@@ -10,6 +11,48 @@ const apiComments = useApiComments();
 const { user: myUser } = useAuth();
 
 const comments = ref({ data: [] as IComment[], pagination: {} });
+
+type Trigger = '@' | '#'
+
+interface MentionOption {
+  _id: string
+  label: string
+  link?: string
+}
+
+const userOptions = ref<MentionOption[]>([]);
+
+const tokenizedComments = computed(() =>
+  comments.value.data.map((_, index) =>
+    useMentionTokens(comments.value.data[index]?.comment ?? '', comments.value.data[index]?.mentions),
+  ),
+);
+
+const isMentionLoading = ref(false);
+const mentions = ref([]);
+const onSearchMention = async (payload: { trigger: Trigger; query: string }) => {
+  isMentionLoading.value = true;
+
+  const response = await useApiUsers().retrieveAll({ username: payload.query });
+  userOptions.value = response.data.map((u: IUser) => ({
+    _id: u._id!,
+    label: u.username!,
+    link: `/@${u.username}`,
+  }));
+
+  isMentionLoading.value = false;
+};
+
+const onTypingComment = (e: KeyboardEvent) => {
+  if (e.key.length !== 1) return;
+
+  isMentionLoading.value = true;
+};
+
+const isShowSuggestions = ref();
+const showSuggestions = (val: boolean) => {
+  isShowSuggestions.value = val;
+};
 
 function closeModal() {
   isOpen.value = false;
@@ -28,17 +71,20 @@ const onComment = async () => {
       goal_id: goal.value?._id,
       created_by_id: myUser.value?._id,
       comment: inputComment.value,
+      mentions: mentions.value,
     });
 
     goal.value.comments.pop();
     goal.value.comments.unshift({
       goal_id: goal.value._id,
       comment: inputComment.value,
+      mentions: mentions.value,
       created_by: myUser.value as IUser,
     });
     comments.value.data.unshift({
       goal_id: goal.value._id,
       comment: inputComment.value,
+      mentions: mentions.value,
       created_by: myUser.value as IUser,
       created_at: new Date(),
     });
@@ -90,20 +136,29 @@ watch(isOpen, async (val) => {
         <!-- Comment List -->
         <div class="flex flex-1 flex-col gap-3 py-4 overflow-y-auto">
           <div
-            v-for="comment in comments.data"
-            :key="comment._id"
+            v-for="(comment, index) in tokenizedComments"
+            :key="index"
             class="flex items-start gap-2"
           >
-            <avatar :size="32" :user="comment.created_by as IUser" />
+            <avatar :size="32" :user="comments.data[index]?.created_by" />
             <p class="flex flex-col">
               <span class="space-x-1 text-sm">
-                <span class="font-semibold">{{ comment.created_by?.username }}</span>
-                <span class="whitespace-pre-wrap">{{ comment.comment }}</span>
+                <span class="font-semibold">{{ comments.data[index]?.created_by?.username }}</span>
+                <span class="whitespace-pre-wrap">
+                  <template v-for="(t, i) in comment" :key="i">
+                    <router-link v-if="t.type === 'mention' && t.link" :to="t.link" style="color: #007bff;" @click="closeModal">
+                      {{ t.text }}
+                    </router-link>
+                    <span v-else>
+                      {{ t.text }}
+                    </span>
+                  </template>
+                </span>
               </span>
 
               <span class="text-xs text-slate-400">
                 <client-only>
-                  {{ timeAgo(comment.created_at) }}
+                  {{ timeAgo(comments.data[index]?.created_at) }}
                 </client-only>
               </span>
             </p>
@@ -115,8 +170,14 @@ watch(isOpen, async (val) => {
           <base-mention
             v-model="inputComment"
             class="flex-1"
-            autofocus
             placeholder="Add a comment..."
+            :options="{ '@': userOptions }"
+            :loading="isMentionLoading"
+            autofocus
+            @show-suggestions="showSuggestions"
+            @update:mentions="mentions = $event"
+            @search="onSearchMention"
+            @keydown="onTypingComment"
             @keydown.enter="onEnter"
           />
           <base-button type="submit" variant="text" color="primary">
