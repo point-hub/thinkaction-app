@@ -93,7 +93,7 @@ const signin = async () => {
     </form>
 
     <div class="mt-8 text-center text-gray-700">
-      Remember yuor password?
+      Remember your password?
       <nuxt-link to="/signin" class="text-blue-500 hover:text-blue-700 font-bold transition-colors">
         Sign In!
       </nuxt-link>
