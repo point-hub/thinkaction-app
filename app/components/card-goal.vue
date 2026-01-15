@@ -181,7 +181,7 @@ const isWithin7Days = (createdAt: string | Date) => {
                 aria-labelledby="options-menu"
               >
                 <button
-                  v-if="myUser?._id === goal?.created_by?._id && goal?.status === 'in-progress'"
+                  v-if="isWithin7Days(goal?.created_at!) && myUser?._id === goal?.created_by?._id && goal?.status === 'in-progress'"
                   class="flex w-full items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                   role="menuitem"
                   @click="completeGoal"
