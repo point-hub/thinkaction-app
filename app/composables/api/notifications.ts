@@ -5,7 +5,7 @@ export interface INotification {
   type: string
   actor: IUser
   goal_id?: string
-  comment?: string
+  message?: string
   is_read?: string
   thumbnail_url?: string
   entities?: Record<string, string>

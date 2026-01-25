@@ -126,11 +126,17 @@ const onSearchMention = async (payload: { trigger: Trigger; query: string }) => 
     username: payload.query,
   });
 
-  userOptions.value = res.data.map((u: IUser) => ({
-    _id: u._id!,
-    label: u.username!,
-    link: `/@${u.username}`,
-  }));
+  userOptions.value = res.data.map((u: IUser) => {
+    const avatar = u.avatar?.public_path
+      ? `${u.avatar?.public_domain}${u.avatar?.public_path}`
+      : '';
+    return {
+      _id: u._id!,
+      label: u.username!,
+      avatar_url: avatar,
+      link: `/@${u.username}`,
+    };
+  });
 
   isMentionLoading.value = false;
 };
