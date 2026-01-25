@@ -3,6 +3,7 @@ import { useApiGoals, type IGoal } from '~/composables/api/goals';
 import { ref, computed } from 'vue';
 import { useApiCheers } from '~/composables/api/cheers';
 import { useApiComments } from '~/composables/api/comments';
+import { useApiUsers } from '~/composables/api/users';
 
 const config = useRuntimeConfig();
 const appBaseURL = config.public.appBase;
@@ -78,6 +79,43 @@ const isCommentsModalOpen = ref(false);
 const inputComment = ref('');
 const isCommenting = ref(false);
 
+type Trigger = '@' | '#'
+
+interface MentionOption {
+  _id: string
+  label: string
+  link?: string
+}
+
+const tagOptions = ref<MentionOption[]>([]);
+const userOptions = ref<MentionOption[]>([]);
+
+const lookup = computed<Record<Trigger, Record<string, string | undefined>>>(() => ({
+  '@': Object.fromEntries(userOptions.value.map(u => [u.label.toLowerCase(), u.link])),
+  '#': Object.fromEntries(tagOptions.value.map(t => [t.label.toLowerCase(), t.link])),
+}));
+
+const tokenizedComments = computed(() =>
+  goal.value?.comments.map((_, index) =>
+    useMentionTokens(goal.value?.comments[index]?.comment ?? '', goal.value?.comments[index]?.mentions),
+  ),
+);
+
+const isMentionLoading = ref(false);
+const mentions = ref([]);
+const onSearchMention = async (payload: { trigger: Trigger; query: string }) => {
+  isMentionLoading.value = true;
+
+  const response = await useApiUsers().retrieveAll({ username: payload.query });
+  userOptions.value = response.data.map((u: IUser) => ({
+    _id: u._id!,
+    label: u.username!,
+    link: `/@${u.username}`,
+  }));
+
+  isMentionLoading.value = false;
+};
+
 const openCommentsModal = () => {
   isCommentsModalOpen.value = true;
 };
@@ -93,12 +131,14 @@ const onComment = async () => {
       goal_id: goal.value?._id,
       created_by_id: myUser.value?._id,
       comment: inputComment.value,
+      mentions: mentions.value,
     });
 
     goal.value.comments.pop();
     goal.value.comments.unshift({
       goal_id: goal.value._id,
       comment: inputComment.value,
+      mentions: mentions.value,
       created_by: myUser.value ?? undefined,
       created_at: new Date(),
     });
@@ -112,8 +152,19 @@ const onComment = async () => {
   }
 };
 
+const onTypingComment = (e: KeyboardEvent) => {
+  if (e.key.length !== 1) return;
+
+  isMentionLoading.value = true;
+};
+
+const isShowSuggestions = ref();
+const showSuggestions = (val: boolean) => {
+  isShowSuggestions.value = val;
+};
+
 const onEnterComment = (e: KeyboardEvent) => {
-  if (e.shiftKey) return;
+  if (e.shiftKey || isShowSuggestions.value) return;
   e.preventDefault();
   onComment();
 };
@@ -143,6 +194,10 @@ const isWithin7Days = (createdAt: string | Date) => {
   const diffInDays = (now.getTime() - created.getTime()) / (1000 * 60 * 60 * 24);
 
   return diffInDays <= 7;
+};
+
+const generateMentionLink = () => {
+//
 };
 </script>
 
@@ -306,19 +361,28 @@ const isWithin7Days = (createdAt: string | Date) => {
             <span class="whitespace-pre-wrap">{{ goal?.achievable }}</span>
           </p>
         </div>
-
         <div class="text-sm border-t border-gray-200 mt-2 flex flex-col gap-2">
           <p v-if="goal?.comments?.length || myUser" class="mt-2 text-slate-900 font-bold">Comments</p>
-          <div v-for="comment in goal?.comments" :key="comment._id" class="flex items-start gap-2">
-            <avatar :size="24" :user="comment.created_by" />
+
+          <div v-for="(comment, index) in tokenizedComments" :key="index" class="flex items-start gap-2">
+            <avatar :size="24" :user="goal?.comments[index]?.created_by" />
             <div class="flex flex-col">
               <p class="space-x-1">
-                <span class="font-semibold">{{ comment.created_by?.username }}</span>
-                <span class="text-slate-700 whitespace-pre-wrap">{{ comment.comment }}</span>
+                <span class="font-semibold">{{ goal?.comments[index]?.created_by?.username }}</span>
+                <span class="text-slate-700 whitespace-pre-wrap">
+                  <template v-for="(t, i) in comment" :key="i">
+                    <router-link v-if="t.type === 'mention' && t.link" :to="t.link" style="color: #007bff;">
+                      {{ t.text }}
+                    </router-link>
+                    <span v-else>
+                      {{ t.text }}
+                    </span>
+                  </template>
+                </span>
               </p>
 
               <span class="text-xs text-slate-400">
-                <client-only>{{ timeAgo(comment.created_at) }}</client-only>
+                <client-only>{{ timeAgo(goal?.comments[index]?.created_at) }}</client-only>
               </span>
             </div>
           </div>
@@ -331,7 +395,18 @@ const isWithin7Days = (createdAt: string | Date) => {
           </p>
         </div>
         <form v-if="myUser" class="flex justify-between gap-2" @submit.prevent="onComment">
-          <base-mention v-model="inputComment" class="flex-1" placeholder="Add a comment..." @keydown.enter="onEnterComment" />
+          <base-mention
+            v-model="inputComment"
+            class="flex-1"
+            placeholder="Add a comment..."
+            :options="{ '@': userOptions }"
+            :loading="isMentionLoading"
+            @show-suggestions="showSuggestions"
+            @update:mentions="mentions = $event"
+            @search="onSearchMention"
+            @keydown="onTypingComment"
+            @keydown.enter="onEnterComment"
+          />
           <div class="self-end">
             <base-button type="submit" variant="text" color="primary">
               <span class="text-xs">POST</span>

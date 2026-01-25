@@ -14,10 +14,10 @@
   },
   "dependencies": {
     "@ably/chat": "^1.1.1",
-    "@point-hub/papp": "^0.0.144",
+    "@point-hub/papp": "^0.0.149",
     "@stefanobartoletti/nuxt-social-share": "^2.3.0",
     "ably": "^2.16.0",
-    "fabric": "^7.0.0",
+    "fabric": "^7.1.0",
     "nuxt": "^4.2.2",
     "qs": "^6.14.1",
     "vue": "^3.5.26",

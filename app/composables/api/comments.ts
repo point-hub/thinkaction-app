@@ -5,6 +5,11 @@ export interface IComment {
   goal_id?: string
   parent_id?: string // null = top level comment
   comment?: string
+  mentions?: {
+    _id: string
+    label: string
+    link?: string
+  }[]
   // Metadata
   created_at?: Date
   updated_at?: Date
