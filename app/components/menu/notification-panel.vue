@@ -34,10 +34,19 @@ watch(
   },
 );
 
+const systemNotifications = ref<INotifications>();
 const notifications = ref<INotifications>();
 
 onMounted(async () => {
   const { user: authUser } = useAuth();
+
+  systemNotifications.value = await apiNotifications.retrieveAll({
+    filter: {
+      type: 'system',
+      recipient_id: authUser.value?._id,
+    },
+    sort: '-created_at',
+  });
 
   notifications.value = await apiNotifications.retrieveAll({
     filter: {
@@ -64,9 +73,9 @@ onMounted(async () => {
 
         <!-- Body -->
         <div class="flex-1 overflow-y-auto p-3 gap-4">
-          <template v-for="(notification, index) in notifications?.data" :key="index">
-            <div v-if="notification && ['system', 'comment', 'support', 'mention', 'cheers', 'goal-reminder'].includes(notification.type)" class="flex items-start gap-3 p-2 hover:bg-slate-50 transition" :class="{ 'bg-slate-100': !notification.is_read }">
-              <base-avatar v-if="notification.type === 'system' || notification.type === 'goal-reminder'" src="/images/ai.webp" :size="32" />
+          <template v-for="(notification, index) in systemNotifications?.data" :key="index">
+            <div v-if="notification && ['system'].includes(notification.type)" class="flex items-start gap-3 p-2 hover:bg-green-50 bg-green-100 transition shadow" :class="{ 'bg-green-100': !notification.is_read }">
+              <base-avatar v-if="notification.type === 'system'" src="/images/ai.webp" :size="32" />
               <avatar v-else :size="32" :user="notification.actor" />
 
               <template v-if="notification.type === 'system'">
@@ -81,6 +90,14 @@ onMounted(async () => {
                   </div>
                 </nuxt-link>
               </template>
+            </div>
+          </template>
+
+          <!-- Non System Notification -->
+          <template v-for="(notification, index) in notifications?.data" :key="index">
+            <div v-if="notification && ['comment', 'support', 'mention', 'cheers'].includes(notification.type)" class="flex items-start gap-3 p-2 hover:bg-slate-50 transition" :class="{ 'bg-slate-100': !notification.is_read }">
+              <avatar :size="32" :user="notification.actor" />
+
               <template v-if="notification.type === 'comment'">
                 <nuxt-link :to="`/goals/${notification.entities?.goals}`" class="flex justify-between flex-1" @click="showSidebar = false">
                   <div class="flex-1 text-sm">
@@ -123,15 +140,6 @@ onMounted(async () => {
                   </div>
                   <div v-if="notification.thumbnail_url" class="flex items-center flex-0">
                     <img :src="notification.thumbnail_url" class="w-8 h-8 rounded-lg">
-                  </div>
-                </nuxt-link>
-              </template>
-              <template v-else-if="notification.type === 'goal-reminder'">
-                <nuxt-link :to="`/goals/${notification.entities?.goals}`" @click="showSidebar = false">
-                  <div class="flex-1 text-sm">
-                    <span class="font-semibold">SYSTEM</span>
-                    <span class="text-slate-600 pl-1">You have 1 day left to wrap up your goal.</span>
-                    <div class="text-xs text-slate-400">{{ timeAgo(notification.created_at) }}</div>
                   </div>
                 </nuxt-link>
               </template>
