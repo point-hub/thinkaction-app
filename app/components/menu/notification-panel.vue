@@ -65,9 +65,22 @@ onMounted(async () => {
         <!-- Body -->
         <div class="flex-1 overflow-y-auto p-3 gap-4">
           <template v-for="(notification, index) in notifications?.data" :key="index">
-            <div v-if="notification && ['comment', 'support', 'mention', 'cheers', 'goal-reminder'].includes(notification.type)" class="flex items-start gap-3 p-2 hover:bg-slate-50 transition" :class="{ 'bg-slate-100': !notification.is_read }">
-              <avatar :size="32" :user="notification.actor" />
+            <div v-if="notification && ['system', 'comment', 'support', 'mention', 'cheers', 'goal-reminder'].includes(notification.type)" class="flex items-start gap-3 p-2 hover:bg-slate-50 transition" :class="{ 'bg-slate-100': !notification.is_read }">
+              <base-avatar v-if="notification.type === 'system'" src="/images/ai.webp" :size="32" />
+              <avatar v-else :size="32" :user="notification.actor" />
 
+              <template v-if="notification.type === 'system'">
+                <nuxt-link to="javascript:void(0)" class="flex justify-between flex-1">
+                  <div class="flex-1 text-sm">
+                    <span class="font-semibold">SYSTEM</span>
+                    <span class="text-slate-600 pl-1">{{ notification.message }}</span>
+                    <div class="text-xs text-slate-400">{{ timeAgo(notification.created_at) }}</div>
+                  </div>
+                  <div v-if="notification.thumbnail_url" class="flex items-center flex-0">
+                    <img :src="notification.thumbnail_url" class="w-8 h-8 rounded-lg">
+                  </div>
+                </nuxt-link>
+              </template>
               <template v-if="notification.type === 'comment'">
                 <nuxt-link :to="`/goals/${notification.entities?.goals}`" class="flex justify-between flex-1" @click="showSidebar = false">
                   <div class="flex-1 text-sm">
