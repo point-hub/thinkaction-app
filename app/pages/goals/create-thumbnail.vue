@@ -331,11 +331,26 @@ const toBlob = async () => {
   });
   canvas.renderAll();
 
-  const blob = await canvas.toBlob({
+  let blob = await canvas.toBlob({
     format: 'webp',
     quality: 0.9,
     multiplier: 1,
   });
+
+  // If the size > 500kb, we assume that formatting to webp is failed
+  // then try to optimize the image using jpeg instead
+  if (blob && blob.size / 1024 > 500) {
+    blob = await canvas.toBlob({
+      format: 'jpeg',
+      quality: 0.9,
+      multiplier: 1,
+    });
+  }
+
+  // TODO: Handle error for big file
+  // if (blob!.size / 1024 > 2.000) {
+  //   toast('Image size is too big.', { color: 'danger' });
+  // }
 
   // Restore original scale
   canvas.setZoom(originalZoom);
@@ -357,8 +372,8 @@ const onNext = async () => {
     toast('Please upload your photo before continue.', { color: 'danger' });
     return;
   }
-  navigateTo('/goals/create-visibility');
   form.value.thumbnail_blob = await toBlob();
+  navigateTo('/goals/create-visibility');
 };
 </script>
 
