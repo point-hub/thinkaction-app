@@ -1,5 +1,3 @@
-@import '@point-hub/papp/index.css';
-
 @layer base {
   .scrollbar-hidden {
     /* Firefox */
