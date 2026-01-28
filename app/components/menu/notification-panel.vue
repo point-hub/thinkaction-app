@@ -114,7 +114,7 @@ onMounted(async () => {
                 <nuxt-link :to="`/goals/${notification.entities?.goals}`" class="flex justify-between flex-1" @click="showSidebar = false">
                   <div class="flex-1 text-sm">
                     <span class="font-semibold">{{ notification.actor?.username }}</span>
-                    <span class="text-slate-600 pl-1">is mention you on comment</span>
+                    <span class="text-slate-600 pl-1">is mentioning you in a comment</span>
                     <div class="text-xs text-slate-400">{{ timeAgo(notification.created_at) }}</div>
                   </div>
                   <div v-if="notification.thumbnail_url" class="flex items-center flex-0">
